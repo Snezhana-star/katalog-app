@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import KaRegister from '@/views/Register.vue'
-import KaLogin from '@/views/Login.vue'
+import KaRegister from '@/views/Register'
+import KaLogin from '@/views/Login'
+import KaLogout from '@/views/Logout.vue'
 
 const routes = [
   {
@@ -13,6 +14,12 @@ const routes = [
     path: '/login',
     name: 'login',
     component: KaLogin
+  },
+
+  {
+    path: '/logout',
+    name: 'logout',
+    component: KaLogout
   },
 
   {

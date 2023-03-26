@@ -3,7 +3,8 @@ import apiAuth from '@/api/auth'
 const state = {
     validationErrors: null,
     userToken: null,
-    isLoggedIn: false
+    isLoggedIn: false,
+    isSubmitting: false,
 }
 
 const mutations = {
@@ -73,6 +74,15 @@ const mutations = {
     loginFailure(state, errorMessage) {
         let errors = {"password": [errorMessage]};
         state.validationErrors = errors;
+    },
+
+    logoutStart(state) {
+      state.isSubmitting = true;
+    },
+
+    logoutSuccess(state) {
+        state.isLoggedIn = false;
+        state.userToken = null;
     }
 }
 
@@ -83,7 +93,7 @@ const actions = {
            apiAuth.register(JSON.stringify(payload)).then(response => {
               response.text().then(text => {
                   if(response.status < 400) {
-                      context.commit('registerSuccess', JSON.parse(text));
+                      context.commit('registerSuccess', JSON.parse(text).data['user_token']);
                       resolve();
                   } else {
                       context.commit('registerFailure', JSON.parse(text).error.errors);
@@ -94,12 +104,12 @@ const actions = {
     },
 
     login(context, payload) {
+        context.commit('loginStart');
         return new Promise(resolve => {
-            context.commit('loginStart');
             apiAuth.login(JSON.stringify(payload)).then(response => {
                 response.text().then(text => {
                     if(response.status < 400) {
-                        context.commit('loginSuccess', JSON.parse(text));
+                        context.commit('loginSuccess', JSON.parse(text).data['user_token']);
                         resolve();
                     } else {
                         context.commit('loginFailure', JSON.parse(text).error.message);
@@ -107,6 +117,22 @@ const actions = {
                 })
             });
         });
+    },
+
+    logout(context, payload) {
+        context.commit('logoutStart');
+        return new Promise(resolve => {
+            apiAuth.logout(payload.token).then(response => {
+                response.text().then(text => {
+                    if(response.status < 400) {
+                        context.commit('logoutSuccess');
+                        resolve();
+                    } else {
+                        console.log('Ошибка');
+                    }
+                })
+            });
+        })
     }
 }
 
@@ -118,6 +144,12 @@ const getters = {
 
     isAnonymous(state) {
         return !state.isLoggedIn;
+    },
+
+    userToken(state) {
+        if(state.userToken !== null) {
+            return state.userToken;
+        }
     }
 }
 

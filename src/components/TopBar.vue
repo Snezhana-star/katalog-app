@@ -11,9 +11,8 @@
         <router-link class="link" to="login">Products</router-link>
         <router-link class="link" to="login">Cart</router-link>
         <router-link class="link" to="login">Order</router-link>
+        <router-link class="link" to="logout">Logout</router-link>
       </template>
-
-      <router-link class="link" to="login">Logout</router-link>
     </nav>
   </div>
 </template>
