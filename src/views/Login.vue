@@ -63,6 +63,7 @@ export default {
   width: 100%;
 
   margin: 0 auto;
+  margin-top: 40px;
   text-align: center;
 }
 
@@ -73,6 +74,7 @@ form {
 
   background-color: white;
   padding: 30px 40px;
+  margin-top: 50px;
 }
 
 .item {

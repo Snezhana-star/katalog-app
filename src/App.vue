@@ -1,10 +1,19 @@
 <template>
   <div class="page">
+    <ka-top-bar></ka-top-bar>
     <div class="page-container">
       <router-view/>
     </div>
   </div>
 </template>
+
+<script>
+  import KaTopBar from '@/components/TopBar';
+  export default {
+    name: 'App',
+    components: {KaTopBar},
+  }
+</script>
 
 <style>
 * {

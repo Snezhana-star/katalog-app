@@ -1,13 +1,64 @@
 <template>
+  <div class="topbar">
+    <router-link class="link home" to="products">My katalog</router-link>
+    <nav>
+      <template v-if="isAnonymous">
+        <router-link class="link" to="register">Register</router-link>
+        <router-link class="link" to="login">Login</router-link>
+      </template>
 
+      <template v-else>
+        <router-link class="link" to="login">Products</router-link>
+        <router-link class="link" to="login">Cart</router-link>
+        <router-link class="link" to="login">Order</router-link>
+      </template>
+
+      <router-link class="link" to="login">Logout</router-link>
+    </nav>
+  </div>
 </template>
 
 <script>
 export default {
-  name: "TopBar"
+  name: "KaTopBar",
+  computed: {
+    isAnonymous() {
+      return this.$store.getters.isAnonymous;
+    }
+  }
 }
 </script>
 
 <style scoped>
+
+.topbar {
+  width: 100%;
+  height: 70px;
+  background-color: #232323;
+
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.link {
+  text-decoration: none;
+  color: #e8e8e8;
+  font-size: 20px;
+}
+
+nav .link:nth-child(n + 2) {
+  margin-left: 10px;
+}
+
+nav .link:hover {
+  color: #ff5031;
+}
+
+.link.home {
+  font-size: 26px;
+  font-weight: bold;
+  text-transform: capitalize;
+}
 
 </style>

@@ -41,6 +41,7 @@ const mutations = {
     registerSuccess(state, userToken) {
         state.userToken = userToken;
         state.isLoggedIn = true;
+        state.validationErrors = null;
     },
 
     registerFailure(state, errorMessages) {
@@ -66,6 +67,7 @@ const mutations = {
     loginSuccess(state, userToken) {
         state.userToken = userToken;
         state.isLoggedIn = true;
+        state.validationErrors = null;
     },
 
     loginFailure(state, errorMessage) {
