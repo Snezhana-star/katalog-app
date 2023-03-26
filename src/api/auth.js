@@ -3,7 +3,9 @@ settings.fetchBody.method = 'POST';
 
 async function register(formData) {
     settings.fetchBody.body = formData;
-    let result = await fetch(`${settings.baseUrl}/singup`, settings.fetchBody);
+    console.log(settings.fetchBody);
+    console.log(formData);
+    let result = await fetch(`${settings.baseUrl}/signup`, settings.fetchBody);
     return result;
 }
 

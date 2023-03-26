@@ -6,6 +6,12 @@ const routes = [
     path: '/register',
     name: 'register',
     component: Register
+  },
+
+  {
+    path: '/products',
+    name: 'products',
+    component: Register
   }
 ]
 

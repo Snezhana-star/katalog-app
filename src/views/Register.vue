@@ -2,70 +2,87 @@
   <div class="register">
     <h2 class="title">Register</h2>
     <form action="/" @submit.prevent="onSubmit">
-      <div class="item">
-        <input type="text" placeholder="First name" v-model="firstName">
-        <ul class="errors">
-          <li>Ошибка имени</li>
-          <li>Ошибка имени</li>
-        </ul>
-      </div>
 
       <div class="item">
-        <input type="text" placeholder="Patronymic" v-model="patronymic">
-        <ul class="errors"></ul>
+        <input type="text" placeholder="First name" v-model="formData.firstName">
+        <ka-validation-errors v-if="isErrors" :messages="isErrors.firstName"></ka-validation-errors>
       </div>
 
-      <div class="item">
-        <input type="text" placeholder="Last name" v-model="lastName">
-        <ul class="errors"></ul>
+      <div class="item" :class="{margin: !isErrors}">
+        <input type="text" placeholder="Patronymic" v-model="formData.patronymic">
+        <ka-validation-errors v-if="isErrors" :messages="isErrors.patronymic"></ka-validation-errors>
       </div>
 
-      <div class="item">
-        <input type="email" placeholder="E-mail">
-        <ul class="errors"></ul>
+      <div class="item" :class="{margin: !isErrors}">
+        <input type="text" placeholder="Last name" v-model="formData.lastName">
+        <ka-validation-errors v-if="isErrors" :messages="isErrors.lastName"></ka-validation-errors>
       </div>
 
-      <div class="item">
-        <input type="password" placeholder="Password">
-        <ul class="errors"></ul>
+      <div class="item" :class="{margin: !isErrors}">
+        <input type="email" placeholder="E-mail" v-model="formData.email">
+        <ka-validation-errors v-if="isErrors" :messages="isErrors.email"></ka-validation-errors>
       </div>
 
-      <div class="item">
-        <input type="password" placeholder="Confirm password">
-        <ul class="errors"></ul>
+      <div class="item" :class="{margin: !isErrors}">
+        <input type="password" placeholder="Password" v-model="formData.password1">
+        <ka-validation-errors v-if="isErrors" :messages="isErrors.password1"></ka-validation-errors>
       </div>
-      <input class="btn" type="submit">
+
+      <div class="item" :class="{margin: !isErrors}">
+        <input type="password" placeholder="Confirm password" v-model="formData.password2">
+        <ka-validation-errors v-if="isErrors" :messages="isErrors.password2"></ka-validation-errors>
+      </div>
+
+      <input class="btn" :class="{margin: !isErrors}" type="submit">
     </form>
   </div>
 </template>
 
 <script>
+import KaValidationErrors from "@/components/ValidationErrors.vue";
+
 export default {
   name: "KaRegister",
+  components: {KaValidationErrors},
   data() {
     return {
-      firstName: '',
-      patronymic: '',
-      lastName: '',
+      formData: {
+        firstName: '',
+        patronymic: '',
+        lastName: '',
+        password1: '',
+        password2: '',
+        email: '',
+      }
     }
   },
 
   computed: {
     fio() {
-      return `${this.lastName} ${this.firstName} ${this.patronymic}`;
-    }
-  },
+      return `${this.formData.lastName} ${this.formData.firstName} ${this.formData.patronymic}`;
+    },
 
-  watch: {
-    fio() {
-      console.log('Изменено');
+    payload() {
+      return {
+        "fio": this.fio,
+        "email": this.formData.email,
+        "password": this.formData.password1
+      }
+    },
+
+    isErrors() {
+      return this.$store.getters.isErrors;
     }
   },
 
   methods: {
     onSubmit() {
-      console.log('Форма отправлена');
-    }
+      this.$store.commit('validateFields', this.formData);
+      if(!this.isErrors) this.$store.dispatch('register', this.payload).then(resolved => {
+        this.$router.push({name: 'products'});
+      });
+    },
+
   }
 }
 </script>
@@ -95,16 +112,8 @@ form {
   flex-direction: column;
 }
 
-.errors {
-  min-height: 15px;
-  list-style-type: none;
-  text-align: left;
-  font-size: 14px;
-  color: red;
-}
-
-.errors li:first-child {
-  margin-top: 3px;
+.item.margin:nth-child(n + 2) {
+  margin-top: 20px;
 }
 
 input {
@@ -126,8 +135,12 @@ input.btn {
   border: 0;
   background-color: dodgerblue;
   color: white;
-  transition: all 0.2s linear;
   margin-top: 20px;
+  transition: background-color 0.2s linear;
+}
+
+input.btn.margin {
+  margin-top: 40px;
 }
 
 input.btn:hover {
