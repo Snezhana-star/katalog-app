@@ -1,17 +1,24 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Register from '@/views/Register.vue'
+import KaRegister from '@/views/Register.vue'
+import KaLogin from '@/views/Login.vue'
 
 const routes = [
   {
     path: '/register',
     name: 'register',
-    component: Register
+    component: KaRegister
+  },
+
+  {
+    path: '/login',
+    name: 'login',
+    component: KaLogin
   },
 
   {
     path: '/products',
     name: 'products',
-    component: Register
+    component: KaRegister
   }
 ]
 

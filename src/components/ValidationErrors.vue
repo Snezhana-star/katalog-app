@@ -10,7 +10,7 @@ export default {
   props: {
     messages: {
       type: Array,
-      required: true
+      required: false,
     }
   },
 }
@@ -26,6 +26,6 @@ export default {
 }
 
 .errors li:first-child {
-  margin-top: 3px;
+  margin-top: 5px;
 }
 </style>

@@ -48,14 +48,28 @@ const mutations = {
         let entries = Object.entries(errorMessages);
         entries.forEach(elem => {
             console.log(elem[0]);
-           if(elem[0] === 'password') {
-               errors['password1'] = [];
-               errors['password1'] = elem[1];
-           } else {
-               errors[elem[0]] = [];
-               errors[elem[0]] = elem[1];
-           }
+            if(elem[0] === 'password') {
+                errors['password1'] = [];
+                errors['password1'] = elem[1];
+            } else {
+                errors[elem[0]] = [];
+                errors[elem[0]] = elem[1];
+            }
         });
+        state.validationErrors = errors;
+    },
+
+    loginStart(state) {
+        state.validationErrors = null;
+    },
+
+    loginSuccess(state, userToken) {
+        state.userToken = userToken;
+        state.isLoggedIn = true;
+    },
+
+    loginFailure(state, errorMessage) {
+        let errors = {"password": [errorMessage]};
         state.validationErrors = errors;
     }
 }
@@ -75,6 +89,22 @@ const actions = {
               })
            });
         });
+    },
+
+    login(context, payload) {
+        return new Promise(resolve => {
+            context.commit('loginStart');
+            apiAuth.login(JSON.stringify(payload)).then(response => {
+                response.text().then(text => {
+                    if(response.status < 400) {
+                        context.commit('loginSuccess', JSON.parse(text));
+                        resolve();
+                    } else {
+                        context.commit('loginFailure', JSON.parse(text).error.message);
+                    }
+                })
+            });
+        });
     }
 }
 
@@ -85,7 +115,7 @@ const getters = {
     },
 
     isAnonymous(state) {
-        return state.isLoggedIn;
+        return !state.isLoggedIn;
     }
 }
 
