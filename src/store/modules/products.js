@@ -5,6 +5,7 @@ const state = {
     isLoading: false,
     products: null,
     successMessages: [],
+    sum: 0,
 }
 
 const mutations = {
@@ -35,14 +36,17 @@ const mutations = {
     getCartSuccess(state, productsList) {
         state.isLoading = false;
         state.products = helpers.cartDataConversion(productsList);
+        state.sum = helpers.getSum(state.products);
     },
 
     addProductSuccess(state, productsList) {
         state.products = helpers.cartDataConversion(productsList);
+        state.sum = helpers.getSum(state.products);
     },
 
     deleteProductFromCartSuccess(state, productsList) {
         state.products = helpers.cartDataConversion(productsList);
+        state.sum = helpers.getSum(state.products);
     }
 
 }
@@ -118,6 +122,19 @@ const actions = {
                     });
                 });
             }
+        });
+    },
+
+    toOrder(context, payload) {
+        return new Promise(resolve => {
+            apiProducts.toOrder(payload.token).then(response => {
+                response.text().then(text => {
+                    if(response.ok) {
+                        resolve();
+                    }
+                    else console.log('Ошибочка');
+                })
+            });
         });
     }
 }

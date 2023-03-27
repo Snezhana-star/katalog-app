@@ -2,7 +2,8 @@
   <div class="card">
     <div class="top">
       <div class="title">{{product.name}}</div>
-      <div class="price">{{product.price}}$</div>
+      <div v-if="status==='products'" class="price">{{product.price}}$</div>
+      <div v-if="status==='cart'" class="price">{{product.price * amount}}$</div>
     </div>
     <div class="desc">{{product.description}}</div>
 
@@ -14,7 +15,7 @@
       >Add to Cart</button>
 
       <template v-else-if="status==='cart'">
-        <button class="add rm">Remove all</button>
+        <button class="add rm" @click="deleteAllProduct">Remove all</button>
         <div class="right">
           <button class="count" @click="deleteProduct">-</button>
           <span class="amount">{{amount}}</span>
@@ -70,6 +71,10 @@ export default {
 
     deleteProduct() {
       this.$store.dispatch('deleteProductFromCart', {productIds: [this.product.productIds[0]], token: this.token});
+    },
+
+    deleteAllProduct() {
+      this.$store.dispatch('deleteProductFromCart', {productIds: this.product.productIds, token: this.token});
     }
   }
 }

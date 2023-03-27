@@ -33,6 +33,15 @@ function cartDataConversion(data) {
     return result;
 }
 
+function getSum(data) {
+    let sum = 0;
+    data.forEach(elem => {
+       sum += elem.price * elem.productIds.length;
+    });
+    return sum;
+}
+
 export default {
-    cartDataConversion
+    cartDataConversion,
+    getSum
 }
