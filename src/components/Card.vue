@@ -6,7 +6,11 @@
     </div>
     <div class="desc">{{product.description}}</div>
     <div class="actions">
-      <button class="add" type="button">Add to Cart</button>
+      <button v-if="!isAnonymous"
+              class="add"
+              type="button"
+              @click="addToCart(product.id)"
+      >Add to Cart</button>
     </div>
   </div>
 </template>
@@ -19,6 +23,22 @@ export default {
       type: Object,
       required: true
     }
+  },
+
+  computed: {
+    isAnonymous() {
+      return this.$store.getters.isAnonymous;
+    },
+
+    token() {
+      return this.$store.state.auth.userToken;
+    },
+  },
+
+  methods: {
+    addToCart(productId) {
+      this.$store.dispatch('addToCart', {productId: productId, token: this.token});
+    }
   }
 }
 </script>
@@ -28,7 +48,7 @@ export default {
 .card {
   max-width: 320px;
   width: 100%;
-  padding: 10px;
+  padding: 15px;
   background-color: white;
 
   display: flex;

@@ -5,6 +5,13 @@ async function getProducts() {
     return result;
 }
 
+async function addToCart(token, productId) {
+    settings.fetchBody.headers.Authorization = `Bearer ${token}`;
+    let result = await fetch(`${settings.baseUrl}/cart/${productId}`, settings.fetchBody);
+    return result;
+}
+
 export default {
-    getProducts
+    getProducts,
+    addToCart
 }

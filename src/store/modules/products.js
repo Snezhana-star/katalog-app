@@ -3,9 +3,17 @@ import apiProducts from '@/api/products';
 const state = {
     isLoading: false,
     allProducts: null,
+    successMessages: [],
 }
 
 const mutations = {
+    removeSuccessMessage(state, index) {
+        let newMessages = state.successMessages.filter((elem, i) => {
+           if(i !== index) return true;
+        });
+        state.successMessages = newMessages;
+    },
+
     getProductsStart(state) {
         state.isLoading = true;
     },
@@ -14,6 +22,10 @@ const mutations = {
         state.isLoading = false;
         state.allProducts = productsList;
     },
+
+    addToCartSuccess(state, message) {
+        state.successMessages.push(message);
+    }
 }
 
 const actions = {
@@ -26,6 +38,18 @@ const actions = {
                } else {
                    console.log('Ошибочка');
                }
+            });
+        });
+    },
+
+    addToCart(context, payload) {
+        apiProducts.addToCart(payload.token, payload.productId).then(response => {
+            response.text().then(text => {
+                if(response.status < 400) {
+                    context.commit('addToCartSuccess', JSON.parse(text).data.message);
+                } else {
+                    console.log('Ошибочка');
+                }
             });
         });
     }
