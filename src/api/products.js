@@ -5,9 +5,9 @@ async function getProducts() {
     return result;
 }
 
-async function addToCart(token, productId) {
+async function addToCart(token, id) {
     settings.fetchBody.headers.Authorization = `Bearer ${token}`;
-    let result = await fetch(`${settings.baseUrl}/cart/${productId}`, settings.fetchBody);
+    let result = await fetch(`${settings.baseUrl}/cart/${id}`, settings.fetchBody);
     return result;
 }
 
@@ -17,8 +17,27 @@ async function getCart(token) {
     return result;
 }
 
+async function deleteProductFromCart(token, productIdsArray) {
+    settings.fetchBody.method = 'DELETE';
+    settings.fetchBody.headers.Authorization = `Bearer ${token}`;
+    let promises = [];
+    for(let id of productIdsArray) {
+        let promise = new Promise((resolve, reject) => {
+            fetch(`${settings.baseUrl}/cart/${id}`, settings.fetchBody).then(response => {
+                if(response.ok) resolve('ok');
+                else reject(response.text());
+            });
+        });
+        promises.push(promise);
+    }
+
+    let result = await Promise.all(promises);
+    return result;
+}
+
 export default {
     getProducts,
     addToCart,
-    getCart
+    getCart,
+    deleteProductFromCart
 }

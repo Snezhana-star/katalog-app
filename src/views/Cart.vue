@@ -4,21 +4,32 @@
     <div class="title">Your Cart</div>
     <div v-if="isLoading" :class="{loader: isLoading}"></div>
 
-<!--    <div class="card-wrapper" v-else>-->
-<!--      <ka-card v-for="product in products"-->
-<!--               :product="product"-->
-<!--      ></ka-card>-->
-<!--    </div>-->
+    <div class="card-wrapper" v-else>
+      <ka-card v-for="product in products"
+               :product="product"
+               :status="status"
+      ></ka-card>
+    </div>
   </div>
 
 </template>
 
 <script>
+import KaCard from '@/components/Card';
 export default {
   name: "KaCart",
+  components: {KaCard},
+
+  data() {
+    return {
+      status: 'cart'
+    }
+  },
 
   mounted() {
-    this.$store.dispatch('getCart', {token: this.token});
+    this.$store.dispatch('getCart', {token: this.token}).then(resolved => {
+      this.$router.push({name: 'login'});
+    });
   },
 
   computed: {
@@ -41,6 +52,14 @@ export default {
 
 .cart {
   margin-top: 50px;
+}
+
+.card-wrapper {
+  margin-top: 50px;
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
 }
 
 .title {

@@ -14,6 +14,7 @@
     <div class="card-wrapper" v-else>
       <ka-card v-for="product in products"
                :product="product"
+               :status="status"
       ></ka-card>
     </div>
 
@@ -25,6 +26,13 @@ import KaCard from '@/components/Card';
 export default {
   name: "KaProducts",
   components: {KaCard},
+
+  data() {
+    return {
+      status: 'products'
+    }
+  },
+
   mounted() {
     this.$store.dispatch('getProducts');
   },

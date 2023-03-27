@@ -1,4 +1,5 @@
 import apiProducts from '@/api/products';
+import helpers from "@/utils/helpers";
 
 const state = {
     isLoading: false,
@@ -33,8 +34,17 @@ const mutations = {
 
     getCartSuccess(state, productsList) {
         state.isLoading = false;
-        state.products = productsList;
+        state.products = helpers.cartDataConversion(productsList);
+    },
+
+    addProductSuccess(state, productsList) {
+        state.products = helpers.cartDataConversion(productsList);
+    },
+
+    deleteProductFromCartSuccess(state, productsList) {
+        state.products = helpers.cartDataConversion(productsList);
     }
+
 }
 
 const actions = {
@@ -65,14 +75,49 @@ const actions = {
 
     getCart(context, payload) {
         context.commit('getCartStart');
-        apiProducts.getCart(payload.token).then(response => {
+        return new Promise(resolve => {
+            apiProducts.getCart(payload.token).then(response => {
+                response.text().then(text => {
+                    if(response.status < 400) {
+                        context.commit('getCartSuccess', JSON.parse(text).data);
+                    } else {
+                        resolve();
+                    }
+                });
+            });
+        });
+    },
+
+    addProduct(context, payload) {
+        apiProducts.addToCart(payload.token, payload.productId).then(response => {
             response.text().then(text => {
                 if(response.status < 400) {
-                    context.commit('getCartSuccess', JSON.parse(text).data);
+                    apiProducts.getCart(payload.token).then(response => {
+                        response.text().then(text => {
+                                context.commit('addProductSuccess', JSON.parse(text).data);
+                        });
+                    });
                 } else {
                     console.log('Ошибочка');
                 }
             });
+        });
+    },
+
+    deleteProductFromCart(context, payload) {
+        apiProducts.deleteProductFromCart(payload.token, payload.productIds).then(results => {
+            let flag = results.some(elem => {
+                if(elem === 'ok') return true;
+                else return false;
+            });
+
+            if(flag) {
+                apiProducts.getCart(payload.token).then(response => {
+                    response.text().then(text => {
+                        context.commit('deleteProductFromCartSuccess', JSON.parse(text).data);
+                    });
+                });
+            }
         });
     }
 }
