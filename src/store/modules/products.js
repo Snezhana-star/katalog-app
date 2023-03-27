@@ -7,10 +7,11 @@ const state = {
 
 const mutations = {
     getProductsStart(state) {
-        state.isSubmitting = true;
+        state.isLoading = true;
     },
 
     getProductsSuccess(state, productsList) {
+        state.isLoading = false;
         state.allProducts = productsList;
     },
 }
