@@ -8,9 +8,9 @@
       </template>
 
       <template v-else>
-        <router-link class="link" to="login">Products</router-link>
-        <router-link class="link" to="login">Cart</router-link>
-        <router-link class="link" to="login">Order</router-link>
+        <router-link class="link" to="products">Products</router-link>
+        <router-link class="link" to="cart">Cart</router-link>
+        <router-link class="link" to="order">Order</router-link>
         <router-link class="link" to="logout">Logout</router-link>
       </template>
     </nav>

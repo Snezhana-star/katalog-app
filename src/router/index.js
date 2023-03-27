@@ -2,7 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 import KaRegister from '@/views/Register';
 import KaLogin from '@/views/Login';
 import KaLogout from '@/views/Logout';
-import KaProducts from '@/views/Products.vue';
+import KaProducts from '@/views/Products';
+import KaCart from '@/views/Cart';
 
 const routes = [
   {
@@ -27,6 +28,12 @@ const routes = [
     path: '/products',
     name: 'products',
     component: KaProducts
+  },
+
+  {
+    path: '/cart',
+    name: 'cart',
+    component: KaCart
   }
 ]
 

@@ -35,7 +35,7 @@ export default {
     },
 
     products() {
-      return this.$store.state.products.allProducts;
+      return this.$store.state.products.products;
     },
 
     amountSuccessMessages() {

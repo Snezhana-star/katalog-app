@@ -11,7 +11,14 @@ async function addToCart(token, productId) {
     return result;
 }
 
+async function getCart(token) {
+    settings.fetchBody.headers.Authorization = `Bearer ${token}`;
+    let result = await fetch(`${settings.baseUrl}/cart`, {headers: settings.fetchBody.headers});
+    return result;
+}
+
 export default {
     getProducts,
-    addToCart
+    addToCart,
+    getCart
 }
