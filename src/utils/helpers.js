@@ -41,7 +41,47 @@ function getSum(data) {
     return sum;
 }
 
+function orderDataConversion(order, products) {
+    if(order === null && products === null) return null;
+    let result = [];
+    let arr = [];
+    order.forEach(cartElem => {
+        let obj = {
+            orderId: cartElem['id'],
+            sum: cartElem['order_price'],
+            products: [{id: cartElem.products[0], amount: 0}],
+            name: null
+        };
+        cartElem.products.forEach(cartProductId => {
+            let add = obj.products.every(elem => {
+               if(elem.id !== cartProductId) return true;
+               else {
+                   elem.amount++;
+                   return false;
+               }
+            });
+
+            if(add) {
+                obj.products.push({id: cartProductId, amount: 1});
+            }
+        });
+        result.push(obj);
+    });
+
+    result.forEach(outer => {
+       for(let i = 0; i < products.length; i++) {
+           if(products[i]['id'] === outer.orderId) {
+               outer.name = products[i]['name'];
+               break;
+           }
+       }
+    });
+
+    return result;
+}
+
 export default {
     cartDataConversion,
-    getSum
+    getSum,
+    orderDataConversion
 }

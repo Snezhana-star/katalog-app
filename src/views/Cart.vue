@@ -44,7 +44,7 @@ export default {
     },
 
     products() {
-      return this.$store.state.products.products;
+      return this.$store.state.products.cart;
     },
 
     token() {
@@ -65,7 +65,7 @@ export default {
   methods: {
     toOrder() {
       this.$store.dispatch('toOrder', {token: this.token}).then(resolved => {
-        this.$router.push({name: 'products'});
+        this.$router.push({name: 'order'});
       });
     }
   }

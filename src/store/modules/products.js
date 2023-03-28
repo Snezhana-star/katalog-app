@@ -4,6 +4,8 @@ import helpers from "@/utils/helpers";
 const state = {
     isLoading: false,
     products: null,
+    cart: null,
+    orders: null,
     successMessages: [],
     sum: 0,
 }
@@ -35,18 +37,27 @@ const mutations = {
 
     getCartSuccess(state, productsList) {
         state.isLoading = false;
-        state.products = helpers.cartDataConversion(productsList);
-        state.sum = helpers.getSum(state.products);
+        state.cart = helpers.cartDataConversion(productsList);
+        state.sum = helpers.getSum(state.cart);
     },
 
     addProductSuccess(state, productsList) {
-        state.products = helpers.cartDataConversion(productsList);
-        state.sum = helpers.getSum(state.products);
+        state.cart = helpers.cartDataConversion(productsList);
+        state.sum = helpers.getSum(state.cart);
     },
 
     deleteProductFromCartSuccess(state, productsList) {
-        state.products = helpers.cartDataConversion(productsList);
-        state.sum = helpers.getSum(state.products);
+        state.cart = helpers.cartDataConversion(productsList);
+        state.sum = helpers.getSum(state.cart);
+    },
+
+    getOrderStart(state) {
+        state.isLoading = true;
+    },
+
+    getOrderSuccess(state, productsList) {
+        state.isLoading = false;
+        state.orders = helpers.orderDataConversion(productsList, state.products);
     }
 
 }
@@ -136,7 +147,19 @@ const actions = {
                 })
             });
         });
-    }
+    },
+
+    getOrder(context, payload) {
+        context.commit('getOrderStart');
+        return new Promise(resolve => {
+            apiProducts.getOrder(payload.token).then(response => {
+                response.text().then(text => {
+                    if(response.ok) context.commit('getOrderSuccess', JSON.parse(text).data);
+                    else resolve();
+                });
+            });
+        });
+    },
 }
 
 const getters = {

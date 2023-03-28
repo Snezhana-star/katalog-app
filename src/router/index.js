@@ -4,6 +4,7 @@ import KaLogin from '@/views/Login';
 import KaLogout from '@/views/Logout';
 import KaProducts from '@/views/Products';
 import KaCart from '@/views/Cart';
+import KaOrder from '@/views/Order';
 
 const routes = [
   {
@@ -34,7 +35,14 @@ const routes = [
     path: '/cart',
     name: 'cart',
     component: KaCart
-  }
+  },
+
+  {
+    path: '/order',
+    name: 'order',
+    component: KaOrder
+  },
+
 ]
 
 const router = createRouter({

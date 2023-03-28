@@ -41,10 +41,17 @@ async function toOrder(token) {
     return result;
 }
 
+async function getOrder(token) {
+    settings.fetchBody.headers.Authorization = `Bearer ${token}`;
+    let result = await fetch(`${settings.baseUrl}/order`, {headers: settings.fetchBody.headers});
+    return result;
+}
+
 export default {
     getProducts,
     addToCart,
     getCart,
     deleteProductFromCart,
-    toOrder
+    toOrder,
+    getOrder
 }
