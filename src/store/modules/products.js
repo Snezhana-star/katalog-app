@@ -33,6 +33,7 @@ const mutations = {
 
     getCartStart(state, message) {
         state.isLoading = true;
+        state.cart = null;
     },
 
     getCartSuccess(state, productsList) {
@@ -49,6 +50,10 @@ const mutations = {
     deleteProductFromCartSuccess(state, productsList) {
         state.cart = helpers.cartDataConversion(productsList);
         state.sum = helpers.getSum(state.cart);
+    },
+
+    toOrderSuccess(state) {
+        state.cart = null;
     },
 
     getOrderStart(state) {
@@ -141,6 +146,7 @@ const actions = {
             apiProducts.toOrder(payload.token).then(response => {
                 response.text().then(text => {
                     if(response.ok) {
+                        context.commit('toOrderSuccess');
                         resolve();
                     }
                     else console.log('Ошибочка');

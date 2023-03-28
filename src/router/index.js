@@ -4,9 +4,16 @@ import KaLogin from '@/views/Login';
 import KaLogout from '@/views/Logout';
 import KaProducts from '@/views/Products';
 import KaCart from '@/views/Cart';
-import KaOrder from '@/views/Order';
+import KaOrders from '@/views/Orders';
 
 const routes = [
+
+  {
+    path: '/',
+    name: 'home',
+    component: KaProducts
+  },
+
   {
     path: '/register',
     name: 'register',
@@ -38,9 +45,9 @@ const routes = [
   },
 
   {
-    path: '/order',
-    name: 'order',
-    component: KaOrder
+    path: '/orders',
+    name: 'orders',
+    component: KaOrders
   },
 
 ]

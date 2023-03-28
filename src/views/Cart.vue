@@ -65,7 +65,7 @@ export default {
   methods: {
     toOrder() {
       this.$store.dispatch('toOrder', {token: this.token}).then(resolved => {
-        this.$router.push({name: 'order'});
+        this.$router.push({name: 'orders'});
       });
     }
   }

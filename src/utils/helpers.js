@@ -49,8 +49,7 @@ function orderDataConversion(order, products) {
         let obj = {
             orderId: cartElem['id'],
             sum: cartElem['order_price'],
-            products: [{id: cartElem.products[0], amount: 0}],
-            name: null
+            products: [{id: cartElem.products[0], amount: 0, name: null}],
         };
         cartElem.products.forEach(cartProductId => {
             let add = obj.products.every(elem => {
@@ -62,19 +61,21 @@ function orderDataConversion(order, products) {
             });
 
             if(add) {
-                obj.products.push({id: cartProductId, amount: 1});
+                obj.products.push({id: cartProductId, amount: 1, name: null});
             }
         });
         result.push(obj);
     });
 
     result.forEach(outer => {
-       for(let i = 0; i < products.length; i++) {
-           if(products[i]['id'] === outer.orderId) {
-               outer.name = products[i]['name'];
-               break;
+       outer.products.forEach(product => {
+           for(let i = 0; i < products.length; i++) {
+               if(products[i]['id'] === (product.id + 1)) {
+                   product.name = products[i]['name'];
+                   break;
+               }
            }
-       }
+       });
     });
 
     return result;
